@@ -1,7 +1,7 @@
 package cl.barucvilla.EY.controller;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,13 +31,19 @@ public class UserController {
 	}
 
 	@GetMapping("/user/{id}")
-	public ResponseEntity<?> getUser(@PathVariable Long id) {
-		Optional<User> existingUser = userRepository.findById(id);
-		if (!existingUser.isPresent()) {
-			ErrorMessage error = new ErrorMessage("Usuario no existe");
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+	public ResponseEntity<?> getUser(@PathVariable UUID id) {
+		try {
+			User existingUser = userRepository.findById(id);
+			if (existingUser.getId() == null) {
+				ErrorMessage error = new ErrorMessage("Usuario no existe");
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+			}
+			return ResponseEntity.ok(existingUser);
+		} catch (Exception e) {
+			System.out.println(e);
+			ErrorMessage error = new ErrorMessage("Error al obtener el usuario");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 		}
-		return ResponseEntity.ok(existingUser.get());
 	}
 
 	@PostMapping("/user")
@@ -70,28 +76,35 @@ public class UserController {
 	}
 
 	@PutMapping("user/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-		Optional<User> existingUser = userRepository.findById(id);
-		if (!existingUser.isPresent()) {
-			ErrorMessage error = new ErrorMessage("Usuario no existe");
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-		}
-		if (updatedUser.getName() != null)
-			existingUser.get().setName(updatedUser.getName());
-		if (updatedUser.getEmail() != null)
-			existingUser.get().setEmail(updatedUser.getEmail());
-		if (updatedUser.getPassword() != null) {
-			if (toolbox.validatePassword(updatedUser.getPassword())) {
+	public ResponseEntity<?> updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
+		try {
+			User existingUser = userRepository.findById(id);
+			if (existingUser == null) {
+				ErrorMessage error = new ErrorMessage("Usuario no existe");
+				return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+			}
+			if (!toolbox.validatePassword(updatedUser.getPassword())) {
 				ErrorMessage error = new ErrorMessage("La password no cumple los requisitos");
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 			}
-			existingUser.get().setPassword(updatedUser.getPassword());
-		}
-		existingUser.get().setModified(new Date());
 
-		User savedUser = userRepository.save(existingUser.get());
-		createUserResponse userReturn = new createUserResponse(savedUser);
-		return new ResponseEntity<>(userReturn, HttpStatus.OK);
+			if (updatedUser.getName() != null)
+				existingUser.setName(updatedUser.getName());
+			if (updatedUser.getEmail() != null)
+				existingUser.setEmail(updatedUser.getEmail());
+			if (updatedUser.getPassword() != null)
+				existingUser.setPassword(updatedUser.getPassword());
+
+			existingUser.setModified(new Date());
+
+			User savedUser = userRepository.save(existingUser);
+			createUserResponse userReturn = new createUserResponse(savedUser);
+			return new ResponseEntity<>(userReturn, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			ErrorMessage error = new ErrorMessage("Error al obtener el usuario");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+		}
 	}
 
 }
