@@ -6,7 +6,7 @@ A continuacion indicare el proceso para ejecutar el proyecto.
 
 
 
-## Base de datos
+## Base de datos H2
 
  - [Schema.sql](https://firebasestorage.googleapis.com/v0/b/apprazoi.appspot.com/o/SCHEMA%2FScript%20Schema.sql?alt=media&token=c60d51e1-81ee-48af-86ba-f3e1efb28941)
 
