@@ -43,7 +43,7 @@ A continuacion indicare el proceso para ejecutar el proyecto.
 }
 ```
 
-#### Get user
+#### Get User
 
 ```http
   GET /user/${id}
@@ -74,6 +74,40 @@ A continuacion indicare el proceso para ejecutar el proyecto.
    ]
 }
 ```
+### Get All Users
+
+```http
+  GET /allUser
+```
+##### Request Sample
+```JSON
+[
+   {
+      "id":"92ce7214-c449-4d18-9920-20df9f2fa2f7",
+      "name":"Juan Rodriguez",
+      "email":"juxanc@df51d44s.org",
+      "password":"aTr2uc2s",
+      "created":"2023-04-23T22:26:06.728+00:00",
+      "modified":"2023-04-23T22:26:06.728+00:00",
+      "last_login":"2023-04-23T22:26:06.728+00:00",
+      "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdXhhbmNAZGY1MWQ0NHMub3JnIiwiZXhwIjoxNjgyMzc1MTY2fQ.2ZsfufdkdNxmpwB4Emjc54P_QQfGui5E4Pf76CZ-he7H3oq85bJZe_lhsWnS2yHea3XZjUpgihhaf066gNIngg",
+      "isactive":true,
+      "phones":[]
+   },
+   {
+      "id":"1592c205-1327-4936-ab7d-a0d8c7859803",
+      "name":"Juan Rodriguez",
+      "email":"juxan@df51d44s.org",
+      "password":"aTr2uc2s",
+      "created":"2023-04-23T22:26:09.211+00:00",
+      "modified":"2023-04-23T22:26:09.211+00:00",
+      "last_login":"2023-04-23T22:26:09.211+00:00",
+      "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdXhhbkBkZjUxZDQ0cy5vcmciLCJleHAiOjE2ODIzNzUxNjl9.r4dXCfAP8GFgQ48BZ8BimcWMz0fenBcc-IchwqppgaDFg5FtmJXWtFbsu-I_s3MknUxsG1lzHiIQp3vKowp7zQ",
+      "isactive":true,
+      "phones":[]
+   }
+]
+```
 
 #### Update user
 ```http
@@ -98,7 +132,25 @@ A continuacion indicare el proceso para ejecutar el proyecto.
   "isactive": true
 }
 ```
+#### Delete User
+```http
+  DELETE /user/${id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of user to fetch |
 
+##### Response Sample
+```JSON
+{
+  "id": "40f27e6c-3fb2-49bb-a6a9-9f8da451f250",
+  "created": "2023-04-08T16:41:42.620+00:00",
+  "modified": "2023-04-08T16:41:58.004+00:00",
+  "last_login": "2023-04-08T16:41:42.620+00:00",
+  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQGRmNTFkNDRzLm9yZyIsImV4cCI6MTY4MTA1ODUwMn0.mkeCRH_KB2uD_JBNTXovKOAyx2QfTWvoh9xj-KvxL3hsCawX31Etd2DIEAb3EchFITvtChBgoSOTGGg3XhHgSA",
+  "isactive": true
+}
+```
 
 
 ## Running Tests
@@ -108,4 +160,6 @@ To run tests, run the following command
 ```bash
   ./gradle test
 ```
+
+
 
